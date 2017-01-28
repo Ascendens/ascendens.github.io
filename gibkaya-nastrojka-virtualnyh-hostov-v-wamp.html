@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Гибкая настройка виртуальных хостов в WAMP</title>
+
+        <meta name="description" content="...иногда даже получается">
+        <meta name="author" content="Андрей Котельник">
+        <meta name="viewport" content="width=device-width">
+
+        
+                <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700|PT+Sans:400"><link rel="stylesheet" href="./css/poole.css"><link rel="stylesheet" href="./css/lanyon.css"><link rel="stylesheet" href="https://yandex.st/highlightjs/8.0/styles/github.min.css"><link rel="stylesheet" href="./css/style.css">                <!-- Icons -->
+        <link rel="apple-touch-icon-precomposed" sizes="144x144" href="./apple-touch-icon-144-precomposed.png">
+        <link rel="shortcut icon" href="./favicon.ico">
+        <!-- RSS -->
+        <link rel="alternate" type="application/rss+xml" title="RSS" href="./feed/atom.xml">
+    </head>
+
+    <body>
+                    <!-- Target for toggling the sidebar `.sidebar-checkbox` is for regular
+     styles, `#sidebar-checkbox` for behavior. -->
+<input type="checkbox" class="sidebar-checkbox" id="sidebar-checkbox" />
+
+<!-- Toggleable sidebar -->
+<div class="sidebar" id="sidebar">
+    <aside class="sidebar-item" role="complementary">
+        <p class="text-justify">Здесь должен быть текст, который покажет, что я не только хороший специалист, но и приятный человек, но я его пока не придумал</p>
+    </aside>
+
+    <nav class="sidebar-nav" role="navigation">
+                    <a href="about.html" class="sidebar-nav-item">
+                    Кто здесь?!
+            </a>
+                <a href="https://github.com/Ascendens" class="sidebar-nav-item" rel="nofollow">GitHub</a>
+    </nav>
+
+    <footer class="sidebar-item" role="contentinfo">
+        <p>&copy; 2017 www.ascendens.net</p>
+    </footer>
+</div>
+            <div class="wrap">
+                <div class="masthead">
+                    <header class="container">
+                        <h3 class="masthead-title">
+                            <a href="/" title="Home">Пытаясь программировать</a>
+                            <small>...иногда даже получается</small>
+                        </h3>
+                    </header>
+                </div>
+
+                                    <main class="container content" role="main">
+                            <article class="post">
+        <header>
+            <h1 class="post-title">    Гибкая настройка виртуальных хостов в WAMP</h1>
+                        <time class="post-date" datetime="2014-02-13T18:20:06+02:00">13 Фев 2014</time>    
+        </header>
+        <p>Если вы занимаетесь web-разработкой из-под Windows и еще не знаете что такое WAMP, то самое время узнать. Кратко, это
+очень мощная платформа для веб-разработки. Сегодня я хочу рассказать о гибкой настройке виртуальных хостов в ней.<!--more--></p>
+<h2 id="wamp">Что такое WAMP?<a href="#wamp" class="anchor">#</a></h2>
+<p>WAMP — очень удобная среда разработки под Windows. После его установки в вашем распоряжении будет связка
+Apache2 + PHP + MySQL с PHPMyAdmin. Что действительно очень удобно, так это наличие аддонов. Аддоны в WAMP дают
+возможность иметь на локальной машине сразу несколько версий вышеперечисленного одновременно и очень легко переключаться
+между ними. Думаю, такого вступления будет достаточно, чтоб определиться, нужно ли вообще читать дальше, а более подробную
+информацию можно найти на <a href="http://www.wampserver.com">официальном сайте WAMP</a>, ну и "поиск рулит".</p>
+<p>Предмет сегодняшнего обсуждения возник в связи с тем, что WAMP не создает виртуальных хостов по умолчанию, хотя
+возможность такая в природе существует. После создания в дирректории www (корень локального сервера), например, папки
+test, вы сможете обращаться к нему по адресу <a href="http://localhost/test">http://localhost/test</a>, но не <a href="http://test">http://test</a>. В большинстве случаев,
+виртуальные хосты не нужны, но бывают и исключения. К тому же, мне так больше нравится. В дальнейшем, давайте условимся,
+что WAMP установлен в папку <em>C:\wamp</em>.</p>
+<h2 id="wamp-2">Как включить виртуальные хосты в WAMP<a href="#wamp-2" class="anchor">#</a></h2>
+<p>Функционал виртуальных хостов не включен изначально. Для этого нужно открыть файл <code>httpd.conf</code>,
+который находится в папке <code>conf</code> активной версии сервера Apache. Например, для 2.4.4 — это
+<code>C:\wamp\bin\apache\Apache2.4.4\conf\httpd.conf</code>. Это обычный текстовый файл и
+открывается он соответственно. Далее ищем там фрагмент "Virtual hosts" и убираем знак комментария (#) в строке сразу
+после него, после нужно сохранить файл и перезапустить сервер. Должно получиться вот так:</p>
+<pre><code class="language-apacheconfig"># Virtual hosts
+Include conf/extra/httpd-vhosts.conf</code></pre>
+<h2 id="wamp-3">Как создать виртуальный хост в WAMP<a href="#wamp-3" class="anchor">#</a></h2>
+<p>Для тех, кто не совсем понял, что произошло с изменениями в файле <code>httpd.conf</code>, поясню — мы
+указали, что при загрузке сервера нужно загружать еще один конфигурационный файл <code>httpd-vhosts.conf</code>, в котором как раз
+и хранится информация о виртуальных хостах.</p>
+<p>Для того, чтобы <strong>создать виртуальный хост на локальном сервере</strong>, нужно сделать следующее:</p>
+<ol><li>Создать папку с именем хоста в <em>C:\wamp\www</em>, например, <em>C:\wamp\www\sample</em>.</li>
+<li>Добавить его адрес в системный файл <code>hosts</code>:
+<pre><code class="language-apacheconfig">127.0.0.1 sample</code></pre>
+<p>Для Windows 7, его расположение <em>Windows\System32\drivers\etc\hosts</em>. Это обычный тестовый файл и его можно править
+в "Блокноте". </p>
+<blockquote>
+<p>Не забывайте, что <span class="important">для внесения любых изменений в hosts нужно запустить программу для
+редактирования с правами администратора</span>, а также разрешить изменения в программах защиты. Например, антивирус
+Avira не дает вносить правки, пока активен Real-Time Protection.</p>
+</blockquote></li>
+<li>Добавить хост в файл <code>httpd-vhosts.conf</code>:
+<pre><code class="language-apacheconfig">&lt;VirtualHost *:80&gt;
+ ServerAdmin webmaster@localhost
+ ServerName sample
+ DocumentRoot "c:/wamp/www/sample"
+ ErrorLog "logs/sample-error.log"
+ CustomLog "logs/sample-access.log" common
+ &lt;/VirtualHost&gt;</code></pre></li>
+<li>Сохраните все вышеупомянутые файлы и перезапустите сервер. Теперь <a href="http://sample">http://sample</a> станет доступен. 
+<blockquote>
+<p>Имейте ввиду, что некоторые браузеры могут перенаправить вас на сайт-поисковик по умолчанию, если при первом
+обращении к виртуальному хосту явно не указать протокол — http://</p>
+</blockquote></li>
+</ol><h2 id="wamp-localhost">Как настроить виртуальные хосты в WAMP так, чтобы был доступен и localhost<a href="#wamp-localhost" class="anchor">#</a></h2>
+<p>Вот здесь и начнутся проблемы, которые подтолкнули меня написать эту статью. Стал недоступен <a href="http://localhost">http://localhost</a>, где
+находится много полезной информации, да и не для всех сайтов нужны виртуальные хосты, а запоминать их адреса и вводить
+постоянно вручную, откровенно, лень. Как бы забавно это не звучало, но вопрос решается добавлением еще одного
+виртуального хоста <a href="http://localhost">http://localhost</a>. Пройдите все шаги создания виртуального хоста, но вместо <code>sample</code> используйте
+<code>localhost</code>, а в файл <code>httpd-vhosts.conf</code> нужно добавить следующее:</p>
+<pre><code class="language-apacheconfig">&lt;VirtualHost *:80&gt;
+  ServerAdmin webmaster@localhost
+  DocumentRoot "c:/wamp/www"
+  ServerName localhost
+  ErrorLog "logs/localhost-error.log"
+  CustomLog "logs/localhost-access.log" common
+&lt;/VirtualHost&gt;</code></pre>
+<p>Вот теперь порядок! Можно пользоваться как виртуальными хостами, так и функционалом "домашней страницы" WAMP одновременно.</p>
+    </article>
+                    </main>
+                            </div>
+        
+        <label for="sidebar-checkbox" class="sidebar-toggle"></label>
+
+                    <script src="https://yandex.st/highlightjs/8.0/highlight.min.js"></script>
+            <script>hljs.initHighlightingOnLoad();</script>
+            </body>
+</html>

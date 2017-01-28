@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Symfony2: как получить информацию по проекту без написания кода</title>
+
+        <meta name="description" content="...иногда даже получается">
+        <meta name="author" content="Андрей Котельник">
+        <meta name="viewport" content="width=device-width">
+
+        
+                <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700|PT+Sans:400"><link rel="stylesheet" href="./css/poole.css"><link rel="stylesheet" href="./css/lanyon.css"><link rel="stylesheet" href="https://yandex.st/highlightjs/8.0/styles/github.min.css"><link rel="stylesheet" href="./css/style.css">                <!-- Icons -->
+        <link rel="apple-touch-icon-precomposed" sizes="144x144" href="./apple-touch-icon-144-precomposed.png">
+        <link rel="shortcut icon" href="./favicon.ico">
+        <!-- RSS -->
+        <link rel="alternate" type="application/rss+xml" title="RSS" href="./feed/atom.xml">
+    </head>
+
+    <body>
+                    <!-- Target for toggling the sidebar `.sidebar-checkbox` is for regular
+     styles, `#sidebar-checkbox` for behavior. -->
+<input type="checkbox" class="sidebar-checkbox" id="sidebar-checkbox" />
+
+<!-- Toggleable sidebar -->
+<div class="sidebar" id="sidebar">
+    <aside class="sidebar-item" role="complementary">
+        <p class="text-justify">Здесь должен быть текст, который покажет, что я не только хороший специалист, но и приятный человек, но я его пока не придумал</p>
+    </aside>
+
+    <nav class="sidebar-nav" role="navigation">
+                    <a href="about.html" class="sidebar-nav-item">
+                    Кто здесь?!
+            </a>
+                <a href="https://github.com/Ascendens" class="sidebar-nav-item" rel="nofollow">GitHub</a>
+    </nav>
+
+    <footer class="sidebar-item" role="contentinfo">
+        <p>&copy; 2017 www.ascendens.net</p>
+    </footer>
+</div>
+            <div class="wrap">
+                <div class="masthead">
+                    <header class="container">
+                        <h3 class="masthead-title">
+                            <a href="/" title="Home">Пытаясь программировать</a>
+                            <small>...иногда даже получается</small>
+                        </h3>
+                    </header>
+                </div>
+
+                                    <main class="container content" role="main">
+                            <article class="post">
+        <header>
+            <h1 class="post-title">    Symfony2: как получить информацию по проекту без написания кода</h1>
+                        <time class="post-date" datetime="2014-04-28T19:04:20+03:00">28 Апр 2014</time>    
+        </header>
+        <p>Иногда бывает нужно узнать информацию по установленным модулям PHP или же используемым bundle'ам, а писать
+дополнительный код, вроде файла с <a href="http://php.net/manual/ru/function.phpinfo.php">phpinfo</a> или лезть в конфигурацию 
+composer'а так лень. Выход есть!<!--more--></p>
+<h2 id="">Информация о платформе<a href="#" class="anchor">#</a></h2>
+<pre><code class="language-bash">php composer.phar show --platform</code></pre>
+<p>После ввода такой команды, вы получите информацию по всем установленным в системе надстройкам PHP. Выглядит вывод
+приблизительно вот так:</p>
+<img src="/images/kak-poluchit-informatsiyu-po-proektu-na-symfony2-bez-napisaniya-koda_1.jpg" alt="Информация об PHP окружении"><h2 id="-2">Информация о установленных библиотеках<a href="#-2" class="anchor">#</a></h2>
+<pre><code class="language-bash">php composer.phar show --installed</code></pre>
+<p>С помощью этой команды вы можете получить информацию об всех установленных библиотеках. Выглядит результат
+очень похоже:</p>
+<img src="/images/kak-poluchit-informatsiyu-po-proektu-na-symfony2-bez-napisaniya-koda_2.jpg" alt="Информация о установленных библиотеках"><p>А если хочется почитать почти то же, но на английском, то ссылку на оригинал можно найти <a href="https://twitter.com/Ascendens_Dark/status/453856889043181568">здесь</a>.</p>
+    </article>
+                    </main>
+                            </div>
+        
+        <label for="sidebar-checkbox" class="sidebar-toggle"></label>
+
+                    <script src="https://yandex.st/highlightjs/8.0/highlight.min.js"></script>
+            <script>hljs.initHighlightingOnLoad();</script>
+            </body>
+</html>

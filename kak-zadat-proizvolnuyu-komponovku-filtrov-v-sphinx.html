@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Как задать произвольную компоновку фильтров в Sphinx</title>
+
+        <meta name="description" content="...иногда даже получается">
+        <meta name="author" content="Андрей Котельник">
+        <meta name="viewport" content="width=device-width">
+
+        
+                <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700|PT+Sans:400"><link rel="stylesheet" href="./css/poole.css"><link rel="stylesheet" href="./css/lanyon.css"><link rel="stylesheet" href="https://yandex.st/highlightjs/8.0/styles/github.min.css"><link rel="stylesheet" href="./css/style.css">                <!-- Icons -->
+        <link rel="apple-touch-icon-precomposed" sizes="144x144" href="./apple-touch-icon-144-precomposed.png">
+        <link rel="shortcut icon" href="./favicon.ico">
+        <!-- RSS -->
+        <link rel="alternate" type="application/rss+xml" title="RSS" href="./feed/atom.xml">
+    </head>
+
+    <body>
+                    <!-- Target for toggling the sidebar `.sidebar-checkbox` is for regular
+     styles, `#sidebar-checkbox` for behavior. -->
+<input type="checkbox" class="sidebar-checkbox" id="sidebar-checkbox" />
+
+<!-- Toggleable sidebar -->
+<div class="sidebar" id="sidebar">
+    <aside class="sidebar-item" role="complementary">
+        <p class="text-justify">Здесь должен быть текст, который покажет, что я не только хороший специалист, но и приятный человек, но я его пока не придумал</p>
+    </aside>
+
+    <nav class="sidebar-nav" role="navigation">
+                    <a href="about.html" class="sidebar-nav-item">
+                    Кто здесь?!
+            </a>
+                <a href="https://github.com/Ascendens" class="sidebar-nav-item" rel="nofollow">GitHub</a>
+    </nav>
+
+    <footer class="sidebar-item" role="contentinfo">
+        <p>&copy; 2017 www.ascendens.net</p>
+    </footer>
+</div>
+            <div class="wrap">
+                <div class="masthead">
+                    <header class="container">
+                        <h3 class="masthead-title">
+                            <a href="/" title="Home">Пытаясь программировать</a>
+                            <small>...иногда даже получается</small>
+                        </h3>
+                    </header>
+                </div>
+
+                                    <main class="container content" role="main">
+                            <article class="post">
+        <header>
+            <h1 class="post-title">    Как задать произвольную компоновку фильтров в Sphinx</h1>
+                        <time class="post-date" datetime="2014-02-03T11:53:53+02:00">03 Фев 2014</time>    
+        </header>
+        <p>Когда я получил задание, связанное с поисковой системой Sphinx, то оказалось, что в Sphinx все фильтры компонуются
+исключительно через условие <code>И</code>. Мне же понадобилась компоновка через <code>ИЛИ</code>, причем сложная. О своем варианте
+решения данного вопроса я сегодня и расскажу.<!--more--></p>
+<p>Итак, речь пойдет о Sphinx'е. Что это такое можно узнать, например, <a href="http://ru.wikipedia.org/wiki/Sphinx_(%D0%BF%D0%BE%D0%B8%D1%81%D0%BA%D0%BE%D0%B2%D0%B0%D1%8F_%D1%81%D0%B8%D1%81%D1%82%D0%B5%D0%BC%D0%B0)">здесь</a> или <a href="http://sphinxsearch.com">здесь</a>.
+Никаких инструкций об установке и настройке поисковой систему куда-либо или как-либо не будет, увы. Рассматривать работу
+мы будем на базе методов класса sfSphinxClient — часть пакета <a href="http://www.symfony-project.org/plugins/sfSphinxPlugin">sfSphinxPlugin</a>
+для Symfony 1.4</p>
+<p>Основными инструментами поиска в Sphinx являются <a href="http://sphinxsearch.com/docs/archives/1.10/extended-syntax.html">запросы</a>
+и <a href="http://www.php.net/manual/ru/sphinxclient.setfilter.php">фильтры</a>. К моему разочарованию, через методы фильтры нельзя
+компоновать с разными логическими условиями, например, <code>(условие1 И условие2) ИЛИ условие3</code>. Если вы задали фильтр, то
+все последущие setFilter при поиске будут сравниваться через <code>И</code>. Часто, такое поведение не дает решить поставленную
+задачу.</p>
+<p>Что же делать, чтобы <strong>заставить фильтры в Sphinx работать через <code>ИЛИ</code></strong>? Решение в методе <a href="http://sphinxsearch.com/docs/archives/1.10/api-func-setselect.html">SetSelect</a>.
+Через него можно задать произвольную выборку данных из существующего индекса, подобно тому, как это делается в базах
+данных. В нашем случае, ключевой является возможность использовать конструкцию <code>IF</code>:</p>
+<pre><code class="language-php">IF(a <= 2 OR b >= 5, 1, 0) AS cf</code></pre>
+<p>"Чудесно, что можно делать произвольные выборки, но чем это может помочь?", — спросите вы. А тем, что теперь мы можем
+задать фильтр по результату условия в <code>SELECT cf</code> в вышеуказанном примере) и получить желаемый результат. Давайте
+рассмотрим фрагмент кода, демонстрирующий <strong>сложную компоновку фильтров в Sphinx</strong>, более наглядно.</p>
+<pre><code class="language-php">//Инициализация клиента
+$sphinx = new sfSphinxClient(array('offset' => 0, 'limit' => 1));
+//Определяем сложный фильтр
+$sphinx->SetSelect('*, IF((a >= 2 OR b <= 5) OR (c != 0 AND c = 10), 1, 0) AS cf');
+//Именно здесь мы применяем сложный фильтр к выборке. Обязательно без @ и прочих специальных символов!!!
+$sphinx->SetFilter('cf', array(1));
+//Получаем результат
+$result = $sphinx->getRes();</code></pre>
+<p>Можно, также, использовать несколько <code>IF</code> в одном <code>SELECT</code> — разделяются запятой и должны , и даже проводить над
+результатами различные операции, например:</p>
+<pre><code class="language-php">IF(a >= 2 OR b <= 5, 1, 0) + IF(c != 0 AND c = 10, 5, 0)</code></pre>
+<p>Достаточно гибко, хотя наглядная компоновка фильтров, как в том же Elasticsearch, по-моему, для неискушенных удобнее.</p>
+    </article>
+                    </main>
+                            </div>
+        
+        <label for="sidebar-checkbox" class="sidebar-toggle"></label>
+
+                    <script src="https://yandex.st/highlightjs/8.0/highlight.min.js"></script>
+            <script>hljs.initHighlightingOnLoad();</script>
+            </body>
+</html>
