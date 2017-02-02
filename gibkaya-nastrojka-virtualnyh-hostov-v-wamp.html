@@ -9,6 +9,7 @@
         <meta name="description" content="...иногда даже получается">
         <meta name="author" content="Андрей Котельник">
         <meta name="viewport" content="width=device-width">
+        <meta name="google-site-verification" content="srcHAgeuk6CVcbIN_EgR07rRYW1oG420EIbLWAB73P4" />
 
         
                 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700|PT+Sans:400"><link rel="stylesheet" href="./css/poole.css"><link rel="stylesheet" href="./css/lanyon.css"><link rel="stylesheet" href="https://yandex.st/highlightjs/8.0/styles/github.min.css"><link rel="stylesheet" href="./css/style.css">                <!-- Icons -->
@@ -59,7 +60,7 @@
         <p>Если вы занимаетесь web-разработкой из-под Windows и еще не знаете что такое WAMP, то самое время узнать. Кратко, это
 очень мощная платформа для веб-разработки. Сегодня я хочу рассказать о гибкой настройке виртуальных хостов в ней.<!--more--></p>
 <h2 id="wamp">Что такое WAMP?<a href="#wamp" class="anchor">#</a></h2>
-<p>WAMP — очень удобная среда разработки под Windows. После его установки в вашем распоряжении будет связка
+<p>WAMP &mdash; очень удобная среда разработки под Windows. После его установки в вашем распоряжении будет связка
 Apache2 + PHP + MySQL с PHPMyAdmin. Что действительно очень удобно, так это наличие аддонов. Аддоны в WAMP дают
 возможность иметь на локальной машине сразу несколько версий вышеперечисленного одновременно и очень легко переключаться
 между ними. Думаю, такого вступления будет достаточно, чтоб определиться, нужно ли вообще читать дальше, а более подробную
@@ -71,14 +72,14 @@ test, вы сможете обращаться к нему по адресу <a 
 что WAMP установлен в папку <em>C:\wamp</em>.</p>
 <h2 id="wamp-2">Как включить виртуальные хосты в WAMP<a href="#wamp-2" class="anchor">#</a></h2>
 <p>Функционал виртуальных хостов не включен изначально. Для этого нужно открыть файл <code>httpd.conf</code>,
-который находится в папке <code>conf</code> активной версии сервера Apache. Например, для 2.4.4 — это
+который находится в папке <code>conf</code> активной версии сервера Apache. Например, для 2.4.4 &mdash; это
 <code>C:\wamp\bin\apache\Apache2.4.4\conf\httpd.conf</code>. Это обычный текстовый файл и
 открывается он соответственно. Далее ищем там фрагмент "Virtual hosts" и убираем знак комментария (#) в строке сразу
 после него, после нужно сохранить файл и перезапустить сервер. Должно получиться вот так:</p>
 <pre><code class="language-apacheconfig"># Virtual hosts
 Include conf/extra/httpd-vhosts.conf</code></pre>
 <h2 id="wamp-3">Как создать виртуальный хост в WAMP<a href="#wamp-3" class="anchor">#</a></h2>
-<p>Для тех, кто не совсем понял, что произошло с изменениями в файле <code>httpd.conf</code>, поясню — мы
+<p>Для тех, кто не совсем понял, что произошло с изменениями в файле <code>httpd.conf</code>, поясню &mdash; мы
 указали, что при загрузке сервера нужно загружать еще один конфигурационный файл <code>httpd-vhosts.conf</code>, в котором как раз
 и хранится информация о виртуальных хостах.</p>
 <p>Для того, чтобы <strong>создать виртуальный хост на локальном сервере</strong>, нужно сделать следующее:</p>
@@ -103,7 +104,7 @@ Avira не дает вносить правки, пока активен Real-Ti
 <li>Сохраните все вышеупомянутые файлы и перезапустите сервер. Теперь <a href="http://sample">http://sample</a> станет доступен. 
 <blockquote>
 <p>Имейте ввиду, что некоторые браузеры могут перенаправить вас на сайт-поисковик по умолчанию, если при первом
-обращении к виртуальному хосту явно не указать протокол — http://</p>
+обращении к виртуальному хосту явно не указать протокол &mdash; http://</p>
 </blockquote></li>
 </ol><h2 id="wamp-localhost">Как настроить виртуальные хосты в WAMP так, чтобы был доступен и localhost<a href="#wamp-localhost" class="anchor">#</a></h2>
 <p>Вот здесь и начнутся проблемы, которые подтолкнули меня написать эту статью. Стал недоступен <a href="http://localhost">http://localhost</a>, где
@@ -119,6 +120,7 @@ Avira не дает вносить правки, пока активен Real-Ti
   CustomLog "logs/localhost-access.log" common
 &lt;/VirtualHost&gt;</code></pre>
 <p>Вот теперь порядок! Можно пользоваться как виртуальными хостами, так и функционалом "домашней страницы" WAMP одновременно.</p>
+        
     </article>
                     </main>
                             </div>

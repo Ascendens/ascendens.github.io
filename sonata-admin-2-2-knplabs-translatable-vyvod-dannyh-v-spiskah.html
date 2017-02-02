@@ -9,6 +9,7 @@
         <meta name="description" content="...иногда даже получается">
         <meta name="author" content="Андрей Котельник">
         <meta name="viewport" content="width=device-width">
+        <meta name="google-site-verification" content="srcHAgeuk6CVcbIN_EgR07rRYW1oG420EIbLWAB73P4" />
 
         
                 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700|PT+Sans:400"><link rel="stylesheet" href="./css/poole.css"><link rel="stylesheet" href="./css/lanyon.css"><link rel="stylesheet" href="https://yandex.st/highlightjs/8.0/styles/github.min.css"><link rel="stylesheet" href="./css/style.css">                <!-- Icons -->
@@ -57,34 +58,34 @@
                         <time class="post-date" datetime="2014-08-18T18:53:29+03:00">18 Авг 2014</time>    
         </header>
         <p>Впервые попытавшись работать в Sonata Admin с сущностями, переводы которых обеспечивал KnpLabs Translatable, я наткнулся
-на неприятный момент — нет очевидного варианта выводить данные нужной локали в списках. О своем решении этого вопроса
+на неприятный момент &mdash; нет очевидного варианта выводить данные нужной локали в списках. О своем решении этого вопроса
 я бы хотел сегодня рассказать. <!--more--></p>
 <p>Sonata Admin достаточно мощный инструмент и обладает таким замечательным функционалом, как автоматическое определение
-типа данных в поле, а также вывод данных связанных сущностей. Но, в случае с KnpLabs Translatable, мощности оказалось
+типа данных в поле, а также вывод данных связанных сущностей. Но, в случае с&nbsp;KnpLabs Translatable, мощности оказалось
 недостаточно и пришлось придумывать свое решение. Как только я не пытался получить информацию из переводов.</p>
 <pre><code class="language-php">protected function configureListFields(ListMapper $listMapper)
 {
   $listMapper
-    ->add('title')
-    ->add('translations.title')
-    ->add('translations.ru.title')
+    -&gt;add('title')
+    -&gt;add('translations.title')
+    -&gt;add('translations.ru.title')
   ;
 }</code></pre>
-<p>Но ничего не помогало — колонка таблицы была просто пуста. Не помогло и добавление метода _call в сущность, о котором
+<p>Но ничего не помогало &mdash; колонка таблицы была просто пуста. Не помогло и добавление метода _call в сущность, о котором
 можно <a href="https://github.com/KnpLabs/DoctrineBehaviors#proxy-translations">почитать в официальной документации</a>.</p>
-<p>На выручку пришла возможность создавать свои шаблоны для полей списка в Sonata Admin, а также небольшая модификация того
+<p>На выручку пришла возможность создавать свои шаблоны для полей списка в&nbsp;Sonata Admin, а также небольшая модификация того
 самого "волшебного" механизма проксирования. Получилось вот так:</p>
 <pre><code class="language-php">class Entity 
 {
   public function __call($method, $arguments)
   {
-    if( !empty($arguments[0]) && is_array($arguments[0]) 
-        && array_key_exists('locale', $arguments[0]) 
+    if( !empty($arguments[0]) &amp;&amp; is_array($arguments[0]) 
+        &amp;&amp; array_key_exists('locale', $arguments[0]) 
     ) {
-      $this->setCurrentLocale($arguments[0]['locale']);
+      $this-&gt;setCurrentLocale($arguments[0]['locale']);
     }
 
-    return $this->proxyCurrentLocaleTranslation($method, $arguments);
+    return $this-&gt;proxyCurrentLocaleTranslation($method, $arguments);
   }
 }</code></pre>
 <p>Вот такой шаблон:</p>
@@ -102,17 +103,18 @@
 <pre><code class="language-php">protected function configureListFields(ListMapper $listMapper)
 {
   $listMapper
-    ->add('title_ru', null, , array(
-        'field' => 'title', //Имя поле, данные которого нужно вывести
-        'label' => 'Заголовок (RU)',
-        'template' => 'translatable.html.twig', //Имя шаблона, где находится код из блока повыше
-        'locale' => 'ru'
+    -&gt;add('title_ru', null, , array(
+        'field' =&gt; 'title', //Имя поле, данные которого нужно вывести
+        'label' =&gt; 'Заголовок (RU)',
+        'template' =&gt; 'translatable.html.twig', //Имя шаблона, где находится код из блока повыше
+        'locale' =&gt; 'ru'
       ))
   ;
 }</code></pre>
 <p>Теперь данные отлично выводятся. Неудобство только в том, что если содержимое не является текстом, нужно конкретно
 указать тип поля, чтобы на полную использовать оформление Sonata Admin, но, возможно, есть способ этот вопрос решить.
 Если я найду панацею, то обязательно поделюсь ней с вами. Следите за обновлениями!</p>
+        
     </article>
                     </main>
                             </div>
