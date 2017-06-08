@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Symfony2: как получить информацию по проекту без написания кода</title>
+        <title>Виртуальные поля в DataTables</title>
 
         <meta name="description" content="...иногда даже получается">
         <meta name="author" content="Андрей Котельник">
@@ -53,21 +53,49 @@
 
                                     <main class="container content">    <article class="post">
         <header>
-            <h1 class="post-title">    Symfony2: как получить информацию по проекту без написания кода</h1>
-                        <time class="post-date" datetime="2014-04-28T19:04:20+03:00">28 Апр 2014</time>    
+            <h1 class="post-title">    Виртуальные поля в DataTables</h1>
+                        <time class="post-date" datetime="2017-06-08T21:58:00+03:00">08 Июн 2017</time>    
         </header>
-        <p>Иногда бывает нужно узнать информацию по установленным модулям PHP или же используемым bundle'ам, а писать
-дополнительный код, вроде файла с <a href="http://php.net/manual/ru/function.phpinfo.php">phpinfo</a> или лезть в конфигурацию&nbsp;
-composer'а так лень. Выход есть!<!--more--></p>
-<h2 id="">Информация о платформе<a href="#" class="anchor">#</a></h2>
-<pre><code class="language-bash">php composer.phar show --platform</code></pre>
-<p>После ввода такой команды, вы&nbsp;получите информацию по всем установленным в системе надстройкам PHP. Выглядит вывод
-приблизительно вот так:</p>
-<img src="/images/kak-poluchit-informatsiyu-po-proektu-na-symfony2-bez-napisaniya-koda_1.jpg" alt="Информация об PHP окружении"><h2 id="-2">Информация о установленных библиотеках<a href="#-2" class="anchor">#</a></h2>
-<pre><code class="language-bash">php composer.phar show --installed</code></pre>
-<p>С помощью этой команды вы можете получить информацию об всех установленных библиотеках. Выглядит результат
-очень похоже:</p>
-<img src="/images/kak-poluchit-informatsiyu-po-proektu-na-symfony2-bez-napisaniya-koda_2.jpg" alt="Информация о установленных библиотеках"><p>А если хочется почитать почти то же, но на английском, то ссылку на оригинал можно найти <a href="https://twitter.com/Ascendens_Dark/status/453856889043181568">здесь</a>.</p>
+        <p>Приходилось сталкиваться с <a href="https://datatables.net">DataTables</a>? Однажды это случится. А еще, однажды вам понадобится
+вывести поле, с данными, которых нет.<!--more--></p>
+<p>Данные, которых нет... Тесты, которых нет... Ладно, не будем о грустном.</p>
+<p>Предположим, у нас есть список имен и фамилий некоторых подозрительных личностей. Нам нужна таблица, в которой будут
+следующие колонки:</p>
+<ol><li>Имя.</li>
+<li>Фамилия.</li>
+<li>Имя + Фамилия (те самые загадочные данные).</li>
+</ol><p>Давайте начнем с малого и сделаем таблицу c идентификатором <code>names</code>, содержащую только имя и фамилию:</p>
+<pre><code class="language-javascript">// Прекрасно! Ничего лишнего!
+$('#names').DataTable({
+  data: [
+      {firstName: 'John', lastName: 'Doe'},
+      {firstName: 'Jane', lastName: 'Doe'}
+    ],
+    columns: [
+      {title: "First name", data: "firstName"},
+      {title: "Second name", data: "lastName"}
+    ]
+});</code></pre>
+<p>Появляется мысль, что этого достаточно, но руководство упорствует - они хотят колонку, где указано полное имя. Думая
+разное про себя, идем читать документацию библиотеки и находим оцию <a href="https://datatables.net/reference/option/columns.render">columns.render</a>.</p>
+<p>Много хорошего и разного поволяет делать она. Дабы не усложнять, зададим значение по умолчанию <code>_</code>:</p>
+<pre><code class="language-javascript">columns: [
+  {title: "First name", data: "firstName"},
+  {title: "Second name", data: "lastName"},
+  {
+    title: "Full name",
+    data: null,
+    render: {
+        _: function (rowData) {
+        return rowData.firstName + ' ' + rowData.lastName;
+      }
+    }
+  }
+]</code></pre>
+<p>Вот и сбылась мечта - создано полноценное виртуальное поле!</p>
+<blockquote>
+<p><del>Лицензия от</del> С полным рабочим примером можно ознакомиться прямо <a href="https://jsfiddle.net/7dbj6vju/7/">здесь</a>.</p>
+</blockquote>
         
     </article>
 </main>
