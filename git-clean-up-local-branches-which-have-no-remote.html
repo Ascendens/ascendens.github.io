@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ru">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Git. Удаляем все локальные ветки, отслеживающие удаленные с сервера</title>
+
+        <meta name="description" content="Удаление локальных веток, отслеживающих удаленные ветки, которые удалены с сервера одной командой">
+        <meta name="author" content="Андрей Котельник">
+        <meta name="viewport" content="width=device-width">
+        <meta name="google-site-verification" content="srcHAgeuk6CVcbIN_EgR07rRYW1oG420EIbLWAB73P4" />
+
+        
+                <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700%7CPT+Sans:400"><link rel="stylesheet" href="/css/poole.css"><link rel="stylesheet" href="/css/lanyon.css"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css"><link rel="stylesheet" href="/css/style.css">                <!-- Icons -->
+        <link rel="apple-touch-icon" sizes="144x144" href="/apple-touch-icon-precomposed.png">
+        <link rel="shortcut icon" href="/favicon.ico">
+    </head>
+
+    <body>
+                    <!-- Target for toggling the sidebar `.sidebar-checkbox` is for regular
+     styles, `#sidebar-checkbox` for behavior. -->
+<input type="checkbox" class="sidebar-checkbox" id="sidebar-checkbox" />
+
+<!-- Toggleable sidebar -->
+<div class="sidebar" id="sidebar">
+    <aside class="sidebar-item">
+        <p class="text-justify">Здесь должен быть текст, который покажет, что я не только хороший специалист, но и приятный человек, но я его пока не придумал</p>
+    </aside>
+
+    <nav class="sidebar-nav"><a href="about.html" class="sidebar-nav-item">Кто здесь?!</a><a href="https://github.com/Ascendens" class="sidebar-nav-item" rel="nofollow">GitHub</a></nav>
+
+    <footer class="sidebar-item">
+        <p>&copy; 2017 www.ascendens.net</p>
+    </footer>
+</div>
+            <div class="wrap">
+                <div class="masthead">
+                    <header class="container">
+                        <h3 class="masthead-title">
+                            <a href="/" title="Home">Пытаясь программировать</a>
+                            <small>...иногда даже получается</small>
+                        </h3>
+                    </header>
+                </div>
+
+                                    <main class="container content"><article class="post">
+        <header>
+            <h1 class="post-title">Git. Удаляем все локальные ветки, отслеживающие удаленные с сервера</h1>
+                        <time class="post-date" datetime="2017-07-19T23:11:20+03:00">19 Июл 2017</time>    
+        </header>
+        <p>В своей работе я использую <a href="https://danielkummer.github.io/git-flow-cheatsheet/">Git flow</a>. Все бы хорошо, но после
+деплоя обнаруживается, что на локальной машине осталось множество веток, которые слиты в рабочую ветку и удалены на
+сервере. Хочу представить вариант уборки такого бардака.<!--more--></p>
+<p>В Git есть ветки локальные, ветки на сервере и локальные копии веток на сервере, на которые
+<a href="https://stackoverflow.com/questions/4693588/git-what-is-a-tracking-branch">ориентируются</a> локальные. Если ввести
+команду <a href="https://git-scm.com/docs/git-branch">git branch -a</a>, то список последних будет находиться в самом конце. В
+Git 2.7.4 названия начинаются на <strong>remotes/</strong>, например, <strong>remotes/origin/master</strong>.</p>
+<pre><code class="language-bash">user@system:~/Project$ git branch
+* develop
+  master
+  feature/one
+  feature/two
+  remotes/origin/HEAD -&gt; origin/master
+  remotes/origin/develop
+  remotes/origin/master
+  remotes/origin/feature/one</code></pre>
+<p>Теперь посмотрим связь локальных веток с удаленными (локальные в начале, а отслеживаемые в квадратных скобках)</p>
+<pre><code class="language-bash">user@system:~/Project$ git branch -vv
+* develop      0fffd86 [origin/develop] Commit message
+  master       f72fd61 [origin/master] Another commit message
+  feature/one  506f204 [origin/feature/one] One description
+  feature/two  a3c5e7d Very local branch</code></pre>
+<p>Есть в Git такая штука <a href="https://git-scm.com/docs/git-remote">git remote prune</a>. Она позволяет очистить локальные копии
+удаленных веток, которых на сервере уже нет. При этом, <em>совсем</em> локальные ветки никак не затрагиваются. Удалим с сервера
+ветку <strong>feature/one</strong> и посмотрим связь снова.</p>
+<pre><code class="language-bash">user@system:~/Project$ git push origin --delete feature/one
+user@system:~/Project$ git remote prune origin
+user@system:~/Project$ git branch -vv
+* develop      0fffd86 [origin/develop] Commit message
+  master       f72fd61 [origin/master] Another commit message
+  feature/one  506f204 [origin/feature/one: пропал] One description
+  feature/two  a3c5e7d Very local branch</code></pre>
+<p>Ветка <strong>feature/one</strong> все еще отслеживает <strong>origin/feature/one</strong>, но последней нет ни на сервере, ни в списке
+<strong>remotes/</strong>, о чем говорит нам слово "пропал". Найти все пропавшие ветки и вывести их список через пробел можно,
+например, вот так:</p>
+<pre><code class="language-bash">git branch -vv | awk '/\[(.+):\sпропал\]/ {print $1}' | paste -d ' ' -s</code></pre>
+<p>Ещё немного, ещё чуть-чуть, как поется в известной песне. Вспоминаем как удалять локальные ветки и получаем решение:</p>
+<pre><code class="language-bash">git remote prune origin &amp;&amp; git branch -d $(git branch -vv | awk '/\[(.+):\sпропал\]/ {print $1}' | paste -d ' ' -s)</code></pre>
+<blockquote>
+<p>Точно актуально для  Git 2.7.4 c русской локализацией. И не говорите, что я не предупреждал.</p>
+</blockquote>
+        
+    </article></main>
+                            </div>
+        
+        <label for="sidebar-checkbox" class="sidebar-toggle"></label>
+
+                    <script>
+                (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+                    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+                })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+                if (window.location.host.indexOf('local') === -1) {
+                    ga('create', 'UA-18144383-3', 'auto');
+                    ga('send', 'pageview');
+                }
+            </script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+            <script>hljs.initHighlightingOnLoad();</script>
+            </body>
+</html>
