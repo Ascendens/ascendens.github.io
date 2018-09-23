@@ -4,9 +4,9 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Symfony2: как получить информацию по проекту без написания кода</title>
+        <title>PHPStorm. Где живут консоли БД</title>
 
-        <meta name="description" content="Получение информации о платформе и библиотеках PHP через Composer">
+        <meta name="description" content="Как бороться с хаосом в списке консолей базы данных в PHPStorm">
         <meta name="author" content="Андрей Котельник">
         <meta name="viewport" content="width=device-width">
         <meta name="google-site-verification" content="srcHAgeuk6CVcbIN_EgR07rRYW1oG420EIbLWAB73P4" />
@@ -46,21 +46,25 @@
 
                                     <main class="container content"><article class="post">
         <header>
-            <h1 class="post-title">Symfony2: как получить информацию по проекту без написания кода</h1>
-                        <time class="post-date" datetime="2014-04-28T19:04:20+03:00">28 Апр 2014</time>    
+            <h1 class="post-title">PHPStorm. Где живут консоли БД</h1>
+                        <time class="post-date" datetime="2018-09-23T21:21:21+03:00">23 Сен 2018</time>    
         </header>
-        <p>Иногда бывает нужно узнать информацию по установленным модулям PHP или же используемым bundle'ам, а писать
-дополнительный код, вроде файла с <a href="http://php.net/manual/ru/function.phpinfo.php">phpinfo</a> или лезть в конфигурацию&nbsp;
-composer'а так лень. Выход есть!<!--more--></p>
-<h2 id="">Информация о платформе<a href="#" class="anchor">#</a></h2>
-<pre><code class="language-bash">php composer.phar show --platform</code></pre>
-<p>После ввода такой команды, вы&nbsp;получите информацию по всем установленным в системе надстройкам PHP. Выглядит вывод
-приблизительно вот так:</p>
-<img src="/images/kak-poluchit-informatsiyu-po-proektu-na-symfony2-bez-napisaniya-koda_1.jpg" alt="Информация об PHP окружении"><h2 id="-2">Информация о установленных библиотеках<a href="#-2" class="anchor">#</a></h2>
-<pre><code class="language-bash">php composer.phar show --installed</code></pre>
-<p>С помощью этой команды вы можете получить информацию об всех установленных библиотеках. Выглядит результат
-очень похоже:</p>
-<img src="/images/kak-poluchit-informatsiyu-po-proektu-na-symfony2-bez-napisaniya-koda_2.jpg" alt="Информация о установленных библиотеках"><p>А если хочется почитать почти то же, но на английском, то ссылку на оригинал можно найти <a href="https://twitter.com/Ascendens_Dark/status/453856889043181568">здесь</a>.</p>
+        <p>А вы сталкивались с наплывом консолей БД в PHPStorm? Если да, и пока не в курсе, как прекратить это безобразие, то моя
+сегодняшняя заметка как раз об этом.<!--more--></p>
+<p>Бывает, за окном солнечный летний день, в воздухе даже есть легкий запах моря, но ты сидишь себе и с упоением работаешь
+над задачей с элементами БД. Работаешь в PHPStorm, через встроенные средства взаимодействия с БД и внезапно натыкаешься
+на такое:</p>
+<img src="/images/phpstrom-where-db-consoles-lives_1.jpg" alt="Хаос из консолей БД в PHPStorm"><p>На секунду земля уходит из под ног &mdash; как такой бардак мог подкрасться незаметно?! Возникает справедливое желание
+исправить ситуацию пока не стало слишком поздно и ты закрываешь все эти вкладки, но они никуда не исчезают. Да, даже
+если при повторном открытии окна с проектом...</p>
+<img src="/images/phpstrom-where-db-consoles-lives_2.jpg" alt="Хаос из консолей БД в PHPStorm. Продолжение"><p>Попытки очистить список через контекстное меню в вышеупомянутом окне проваливаются, также как и поиски данного списка
+в настройках. И вот, уже почти отчаявшись, ты замечаешь неприметную надпись <strong>Jump to Console Files</strong> и жмешь на нее,
+уже и не надеясь на чудо. Но жизнь полна сюрпризов и этот судьбоносный клик приводит тебя в самый конец практически
+бесконечного дерева проекта, где в уютной служебной секции и проживают эти самые консоли, и где их таки можно удалить.</p>
+<img src="/images/phpstrom-where-db-consoles-lives_2.jpg" alt="Хаос из консолей БД в PHPStorm. Happy end"><blockquote>
+<p>Основано на реальных событиях.
+Любые совпадения заголовков консолей и файлов случайны.</p>
+</blockquote>
         
     </article></main>
                             </div>
