@@ -1,0 +1,18 @@
+{
+    "name": "ascendens/jigsaw-ascendens.net-sources",
+    "description": "Sources of the ascendens.net for Jigsaw static site generator.",
+    "type": "project",
+    "license": "Creative Commons 3.0",
+    "authors": [
+        {
+            "name": "Andrey Kotelnik",
+            "email": "uarockfan@gmail.com"
+        }
+    ],
+    "require": {
+        "tightenco/jigsaw": "^1.3"
+    },
+    "config": {
+        "bin-dir": "bin"
+    }
+}
