@@ -7,12 +7,22 @@ mix.webpackConfig({
     plugins: [
         build.jigsaw,
         build.browserSync(),
-        build.watch(['source/**/*.md', 'source/**/*.php', 'source/**/*.scss', '!source/**/_tmp/*']),
+        build.watch(['source/**/*.md', 'source/**/*.php', 'source/**/*.css', '!source/**/_tmp/*']),
     ]
 });
 
-mix.js('source/_assets/js/main.js', 'js')
-    .sass('source/_assets/sass/main.scss', 'css')
+mix
+    // .js('source/_assets/js/main.js', 'js')
+    .styles(
+        [
+            'source/_assets/css/poole.css',
+            'source/_assets/css/lanyon.css',
+            'source/_assets/css/stynax.css',
+            'source/_assets/css/style.css'
+        ],
+        'source/assets/build/css/main.css'
+    )
     .options({
         processCssUrls: false,
-    }).version();
+    })
+    .version();
