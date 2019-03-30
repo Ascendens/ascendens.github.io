@@ -24,8 +24,8 @@
             <div class="masthead">
                 <header class="container">
                     <h3 class="masthead-title">
-                        <a href="/" title="Home">Пытаясь программировать</a>
-                        <small>...иногда даже получается</small>
+                        <a href="/" title="Home">{{ $page->siteTitle }}</a>
+                        <small>{{ $page->siteDescription }}</small>
                     </h3>
                 </header>
             </div>
