@@ -34,7 +34,6 @@
         </div>
         <label for="sidebar-checkbox" class="sidebar-toggle"></label>
 
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
-        <script>hljs.initHighlightingOnLoad();</script>
+        @yield('bottom_js')
     </body>
 </html>

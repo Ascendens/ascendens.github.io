@@ -14,6 +14,6 @@
     </nav>
 
     <footer class="sidebar-item">
-        <p>&copy; 2017 - {{ date('Y') }} www.ascendens.net</p>
+        <p>&copy; 2017 - {{ date('Y') }} ascendens.net</p>
     </footer>
 </div>

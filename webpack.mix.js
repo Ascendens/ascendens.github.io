@@ -17,7 +17,7 @@ mix
         [
             'source/_assets/css/poole.css',
             'source/_assets/css/lanyon.css',
-            'source/_assets/css/stynax.css',
+            'source/_assets/css/syntax.css',
             'source/_assets/css/style.css'
         ],
         'source/assets/build/css/main.css'
