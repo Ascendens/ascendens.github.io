@@ -2,6 +2,8 @@
 
 @section('page_title'){{ $page->title }}@endsection
 
+@section('page_description'){{ $page->description }}@endsection
+
 @section('body')
 <article class="post">
     <header>

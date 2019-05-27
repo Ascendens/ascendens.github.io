@@ -2,7 +2,8 @@
 extends: _layouts.post
 permalink: kak-zadat-proizvolnuyu-komponovku-filtrov-v-sphinx.html
 title: Как задать произвольную компоновку фильтров в Sphinx
-date: 2014-02-03 11:53:53
+description: Произвольная компоновка фильтров в поисковой системе Sphinx
+date: 1391421233
 ---
 
 Когда я получил задание, связанное с поисковой системой Sphinx, то оказалось, что в Sphinx все фильтры компонуются 

@@ -1,5 +1,7 @@
 <?php
 
+date_default_timezone_set('Europe/Kiev');
+
 return [
     'production' => false,
     'baseUrl' => '',
@@ -32,6 +34,7 @@ return [
     'collections' => [
         'posts' => [
             'path' => '{permalink}',
+            'sort' => '-date',
         ],
     ],
 ];
