@@ -3,22 +3,21 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <title>Carew. Вступительный текст без &quot;front matter&quot;</title>
-
         <meta name="description" content="Определение вступительного (intro) текста в основном на страницах, сгенерированных через Carew">
         <meta name="author" content="Андрей Котельник">
         <meta name="viewport" content="width=device-width">
         <meta name="google-site-verification" content="srcHAgeuk6CVcbIN_EgR07rRYW1oG420EIbLWAB73P4" />
-
-        
-                <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700%7CPT+Sans:400"><link rel="stylesheet" href="/css/poole.css"><link rel="stylesheet" href="/css/lanyon.css"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css"><link rel="stylesheet" href="/css/style.css">                <!-- Icons -->
-        <link rel="apple-touch-icon" sizes="144x144" href="/apple-touch-icon-precomposed.png">
-        <link rel="shortcut icon" href="/favicon.ico">
+                <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700%7CPT+Sans:400">
+        <link rel="stylesheet" href="/assets/build/css/main.css?id=63efd47ac29e03c51d5e">
+        <!-- Icons -->
+        <link rel="apple-touch-icon" sizes="144x144" href="/assets/images/apple-touch-icon-precomposed.png">
+        <link rel="shortcut icon" href="/assets/images/favicon.ico">
     </head>
 
     <body>
-                    <!-- Target for toggling the sidebar `.sidebar-checkbox` is for regular
+        <!-- Target for toggling the sidebar `.sidebar-checkbox` is for regular
      styles, `#sidebar-checkbox` for behavior. -->
 <input type="checkbox" class="sidebar-checkbox" id="sidebar-checkbox" />
 
@@ -28,39 +27,40 @@
         <p class="text-justify">Здесь должен быть текст, который покажет, что я не только хороший специалист, но и приятный человек, но я его пока не придумал</p>
     </aside>
 
-    <nav class="sidebar-nav"><a href="about.html" class="sidebar-nav-item">Кто здесь?!</a><a href="https://github.com/Ascendens" class="sidebar-nav-item" rel="nofollow">GitHub</a></nav>
+    <nav class="sidebar-nav">
+        <a href="about.html" class="sidebar-nav-item">Кто здесь?!</a>
+        <a href="https://github.com/Ascendens" class="sidebar-nav-item" rel="nofollow">GitHub</a>
+    </nav>
 
     <footer class="sidebar-item">
-        <p>&copy; 2017 - 2018 www.ascendens.net</p>
+        <p>&copy; 2017 - 2019 ascendens.net</p>
     </footer>
 </div>
-            <div class="wrap">
-                <div class="masthead">
-                    <header class="container">
-                        <h3 class="masthead-title">
-                            <a href="/" title="Home">Пытаясь программировать</a>
-                            <small>...иногда даже получается</small>
-                        </h3>
-                    </header>
-                </div>
+        <div class="wrap">
+            <div class="masthead">
+                <header class="container">
+                    <h3 class="masthead-title">
+                        <a href="/" title="Home">Пытаясь программировать</a>
+                        <small>...иногда даже получается</small>
+                    </h3>
+                </header>
+            </div>
 
-                                    <main class="container content"><article class="post">
-        <header>
-            <h1 class="post-title">Carew. Вступительный текст без &quot;front matter&quot;</h1>
-                        <time class="post-date" datetime="2017-02-02T21:58:00+02:00">02 Фев 2017</time>    
-        </header>
-        <p>Просматривая категорию публикаций, пользователь вряд ли ожидает увидеть длинное полотно полных текстов.
-Намного логичнее отображать в таких местах специальное вступительное содержимое. О том, как я реализовал
-эту функциональность в генераторе статических сайтов Carew, я и хочу сегодня рассказать.<!--more--></p>
+            <main class="container content"><article class="post">
+    <header>
+        <h1 class="post-title">Carew. Вступительный текст без &quot;front matter&quot;</h1>
+        <time class="post-date" datetime="2017-02-02T21:58:00+02:00">02 Фев 2017</time>
+    </header>
+    
 <h2 id="">Зачем мне понадобился вступительный текст<a href="#" class="anchor">#</a></h2>
-<p>Генератор статических сайтов <a href="http://carew.github.io">Carew</a>, по моему скромному мнению, "из коробки" поддерживает
-почти все, что нужно для ведения среднестатистического блога &mdash; посты, страницы, категории, теги и темы.
-Списки категорий, к сожалению, а может к счастью, представлены достаточно аскетично &mdash; просто список ссылок
+<p>Генератор статических сайтов <a href="https://carew.github.io/">Carew</a>, по моему скромному мнению, &quot;из коробки&quot; поддерживает
+почти все, что нужно для ведения среднестатистического блога — посты, страницы, категории, теги и темы.
+Списки категорий, к сожалению, а может к счастью, представлены достаточно аскетично — просто список ссылок
 на материалы, где анкорами являются заголовки. Но, многим, в том числе и мне, этого покажется мало.
 Просматривая категорию, под заголовком, я ожидаю увидеть намек на то, о чем же все таки идет речь.</p>
 <h2 id="-2">Как отображать вступительный текст<a href="#-2" class="anchor">#</a></h2>
-<p>Итак, первое, что придет на ум разработчику, использующему любой генератор статических сайтов &mdash; это
-<a href="http://carew.github.io/documentation.html#front-matter">front matter</a>. Решение простое и даже
+<p>Итак, первое, что придет на ум разработчику, использующему любой генератор статических сайтов — это
+<a href="https://carew.github.io/documentation.html#front-matter">front matter</a>. Решение простое и даже
 логичное, но попытка использовать там форматирование заканчивается неудачей. Аналогично для нескольких
 строк текста.</p>
 <p>Раз <em>front matter</em> для наших целей не подходит, будем использовать область основного текста. Просто
@@ -91,7 +91,7 @@
 &lt;/a&gt;
 {{ render_document_intro(document) }}</code></pre>
 <p>Понять, почему функция вывода вступления называна именно <code>render_document_intro</code> можно, взглянув на
-<a href="http://carew.github.io/cookbook/helper.html#render-document">этот раздел документации</a>, я же просто
+<a href="https://carew.github.io/cookbook/helper.html#render-document">этот раздел документации</a>, я же просто
 представлю вам свой вариант реализации данного блока:</p>
 <pre><code class="language-twig">{% block document_intro %}
     {% spaceless -%}
@@ -101,25 +101,22 @@
         {% endif %}
     {%- endspaceless %}
 {% endblock %}</code></pre>
-<p>Алгоритм элементарен &mdash; разделяем текст по <code>&lt;!--more--&gt;</code> и выводим первую часть.
-Надеюсь, кому-нибудь прогодится.</p>
-        
-    </article></main>
-                            </div>
-        
+<p>Алгоритм элементарен — разделяем текст по <code>&lt;!--more--&gt;</code> и выводим первую часть. Надеюсь, кому-нибудь прогодится.</p>
+</article>
+</main>
+        </div>
         <label for="sidebar-checkbox" class="sidebar-toggle"></label>
-
                     <script>
-                (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-                        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-                    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-                })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-                if (window.location.host.indexOf('local') === -1) {
-                    ga('create', 'UA-18144383-3', 'auto');
-                    ga('send', 'pageview');
-                }
+            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+                m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+            })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+            if (window.location.host.indexOf('local') === -1) {
+                ga('create', 'UA-18144383-3', 'auto');
+                ga('send', 'pageview');
+            }
             </script>
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
-            <script>hljs.initHighlightingOnLoad();</script>
-            </body>
+                <script src="/assets/build/js/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>.
+    </body>
 </html>

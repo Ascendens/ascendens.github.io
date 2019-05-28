@@ -3,22 +3,21 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <title>Combined Comparison (Spaceship) Operator для чисел на PHP &lt; 7 без операций сравнения</title>
-
         <meta name="description" content="Эмулируем Combined Comparison (Spaceship) Operator, не используя операции сравнения">
         <meta name="author" content="Андрей Котельник">
         <meta name="viewport" content="width=device-width">
         <meta name="google-site-verification" content="srcHAgeuk6CVcbIN_EgR07rRYW1oG420EIbLWAB73P4" />
-
-        
-                <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700%7CPT+Sans:400"><link rel="stylesheet" href="/css/poole.css"><link rel="stylesheet" href="/css/lanyon.css"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css"><link rel="stylesheet" href="/css/style.css">                <!-- Icons -->
-        <link rel="apple-touch-icon" sizes="144x144" href="/apple-touch-icon-precomposed.png">
-        <link rel="shortcut icon" href="/favicon.ico">
+                <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700%7CPT+Sans:400">
+        <link rel="stylesheet" href="/assets/build/css/main.css?id=63efd47ac29e03c51d5e">
+        <!-- Icons -->
+        <link rel="apple-touch-icon" sizes="144x144" href="/assets/images/apple-touch-icon-precomposed.png">
+        <link rel="shortcut icon" href="/assets/images/favicon.ico">
     </head>
 
     <body>
-                    <!-- Target for toggling the sidebar `.sidebar-checkbox` is for regular
+        <!-- Target for toggling the sidebar `.sidebar-checkbox` is for regular
      styles, `#sidebar-checkbox` for behavior. -->
 <input type="checkbox" class="sidebar-checkbox" id="sidebar-checkbox" />
 
@@ -28,54 +27,59 @@
         <p class="text-justify">Здесь должен быть текст, который покажет, что я не только хороший специалист, но и приятный человек, но я его пока не придумал</p>
     </aside>
 
-    <nav class="sidebar-nav"><a href="about.html" class="sidebar-nav-item">Кто здесь?!</a><a href="https://github.com/Ascendens" class="sidebar-nav-item" rel="nofollow">GitHub</a></nav>
+    <nav class="sidebar-nav">
+        <a href="about.html" class="sidebar-nav-item">Кто здесь?!</a>
+        <a href="https://github.com/Ascendens" class="sidebar-nav-item" rel="nofollow">GitHub</a>
+    </nav>
 
     <footer class="sidebar-item">
-        <p>&copy; 2017 - 2018 www.ascendens.net</p>
+        <p>&copy; 2017 - 2019 ascendens.net</p>
     </footer>
 </div>
-            <div class="wrap">
-                <div class="masthead">
-                    <header class="container">
-                        <h3 class="masthead-title">
-                            <a href="/" title="Home">Пытаясь программировать</a>
-                            <small>...иногда даже получается</small>
-                        </h3>
-                    </header>
-                </div>
+        <div class="wrap">
+            <div class="masthead">
+                <header class="container">
+                    <h3 class="masthead-title">
+                        <a href="/" title="Home">Пытаясь программировать</a>
+                        <small>...иногда даже получается</small>
+                    </h3>
+                </header>
+            </div>
 
-                                    <main class="container content"><article class="post">
-        <header>
-            <h1 class="post-title">Combined Comparison (Spaceship) Operator для чисел на PHP &lt; 7 без операций сравнения</h1>
-                        <time class="post-date" datetime="2015-08-12T18:30:00+03:00">12 Авг 2015</time>    
-        </header>
-        <p>А вы знаете, что такое Combined Comparison (Spaceship) Operator? Еще нет? Тогда вам
-<a href="http://www.quora.com/What-is-the-combined-comparison-operator" target="blank_">сюда</a>, а пока я расскажу свой
-вариант реализации данного оператора для чисел на PHP &lt; 7 без использования операторов сравнения.<!--more--></p>
+            <main class="container content"><article class="post">
+    <header>
+        <h1 class="post-title">Combined Comparison (Spaceship) Operator для чисел на PHP &lt; 7 без операций сравнения</h1>
+        <time class="post-date" datetime="2015-08-12T18:30:00+03:00">12 Авг 2015</time>
+    </header>
+    
 <p>Первый вопрос, который вы можете задать, зачем все это нужно? Не знаю, но я столкнулся с такой задачей на одном из
 собеседований, причем ответа мне так и не дали, но пытливый ум не позволил оставить вопрос без внимания.</p>
 <p>Первое, что я решил для себя, знак результата определяется через разность входных параметров. Действительно, по такой
 схеме все получается как нужно:</p>
-<ul><li>$a &lt; $b &mdash; результат отрицательный;</li>
-<li>$a = $b &mdash; результат 0;</li>
-<li>$a &gt; $b &mdash; результат положительный.</li>
-</ul><p>Но на этом закончить нельзя, потому что вариантов может быть всего 3: -1, 0 и 1. Тогда я решил, что неплохо было бы
+<ul>
+<li>$a &lt; $b — результат отрицательный;</li>
+<li>$a = $b — результат 0;</li>
+<li>$a &gt; $b — результат положительный.</li>
+</ul>
+<p>Но на этом закончить нельзя, потому что вариантов может быть всего 3: -1, 0 и 1. Тогда я решил, что неплохо было бы
 делить результат разности - пусть это будет $c - на модуль разности, что даст в итоге единицу с нужным знаком и,
 действительно, получилось неплохо. Почти неплохо...:</p>
-<ul><li>-$c / $c &mdash; результат -1;</li>
-<li>0 / 0 &mdash; а вот здесь и кроется то самое "почти";</li>
-<li>$c /&nbsp;$c &mdash; результат 1.</li>
-</ul><p>Все, чего можно добиться в PHP (&lt; 7, по крайней мере) при делении на 0 &mdash; предупреждение:</p>
-<pre><code class="language-php">E_WARNING : type 2 -- Division by zero</code></pre>
+<ul>
+<li>-$c / $c — результат -1;</li>
+<li>0 / 0 — а вот здесь и кроется то самое &quot;почти&quot;;</li>
+<li>$c / $c — результат 1.</li>
+</ul>
+<p>Все, чего можно добиться в PHP (&lt; 7, по крайней мере) при делении на 0 — предупреждение:</p>
+<pre><code>E_WARNING : type 2 -- Division by zero</code></pre>
 <p>Это означает, что отловить ошибку через <code>try</code> нельзя, а по условию задачи использование операций сравнения запрещено.</p>
 <p>Тогда мне в голову пришла идея сделать так, чтобы делитель никогда не мог быть равен 0. Сделать это я решил через сумму
 делителя с каким-нибудь маленьким числом, например, 0.0001. Как же так, спросите вы, ведь теперь на выходе ни при каком
 условии не получится 0 или 1? И будете правы.</p>
-<p>На помощь приходит фунция <a href="http://php.net/manual/ru/function.round.php">round</a> c <code>$precision = 0</code> и в режиме
+<p>На помощь приходит фунция <a href="https://php.net/manual/ru/function.round.php">round</a> c <code>$precision = 0</code> и в режиме
 <code>PHP_ROUND_HALF_UP</code> (в документации указано, что эти значения являются значениями по умолчанию, но я рекомендую
-указывать их явно, чтобы точно получить нужный&nbsp;результат). Согласно документации:</p>
+указывать их явно, чтобы точно получить нужный результат). Согласно документации:</p>
 <blockquote>
-<p>PHP_ROUND_HALF_UP &mdash; округляет val в большую сторону от нуля до precision десятичных знаков, если следующий знак
+<p>PHP_ROUND_HALF_UP — округляет val в большую сторону от нуля до precision десятичных знаков, если следующий знак
 находится посередине. Т.е. округляет 1.5 в 2 и -1.5 в -2.</p>
 </blockquote>
 <p>В результате я получил следующую функцию:</p>
@@ -91,23 +95,21 @@
 проще, а пока (как минимум для PHP 5.4.38), как вариант, можно использовать такое решение. Если у кого-то есть более
 изящный и лаконичный ответ на поставленный вопрос, то присылайте, с радостью его рассмотрю, а пока до новых встреч и
 удачи!</p>
-        
-    </article></main>
-                            </div>
-        
+</article>
+</main>
+        </div>
         <label for="sidebar-checkbox" class="sidebar-toggle"></label>
-
                     <script>
-                (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-                        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-                    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-                })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-                if (window.location.host.indexOf('local') === -1) {
-                    ga('create', 'UA-18144383-3', 'auto');
-                    ga('send', 'pageview');
-                }
+            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+                m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+            })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+            if (window.location.host.indexOf('local') === -1) {
+                ga('create', 'UA-18144383-3', 'auto');
+                ga('send', 'pageview');
+            }
             </script>
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
-            <script>hljs.initHighlightingOnLoad();</script>
-            </body>
+                <script src="/assets/build/js/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>.
+    </body>
 </html>
