@@ -4,3 +4,7 @@
 .text-justify {
     text-align: justify;
 }
+
+.important {
+    font-weight: bold;
+}
