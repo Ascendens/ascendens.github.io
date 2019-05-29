@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="ru">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title>Как я Loot Appraiser 1.9.3 чинил</title>
+        <meta name="description" content="Оказывается, в аддоне Loot Appraiser 1.9.3 имеются, как минимум, две ошибки и я расскажу, как их исправить.">
+        <meta name="author" content="Андрей Котельник">
+        <meta name="viewport" content="width=device-width">
+        <meta name="google-site-verification" content="srcHAgeuk6CVcbIN_EgR07rRYW1oG420EIbLWAB73P4" />
+                <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700%7CPT+Sans:400">
+        <link rel="stylesheet" href="/assets/build/css/main.css?id=63efd47ac29e03c51d5e">
+        <!-- Icons -->
+        <link rel="apple-touch-icon" sizes="144x144" href="/assets/images/apple-touch-icon-precomposed.png">
+        <link rel="shortcut icon" href="/assets/images/favicon.ico">
+    </head>
+
+    <body>
+        <!-- Target for toggling the sidebar `.sidebar-checkbox` is for regular
+     styles, `#sidebar-checkbox` for behavior. -->
+<input type="checkbox" class="sidebar-checkbox" id="sidebar-checkbox" />
+
+<!-- Toggleable sidebar -->
+<div class="sidebar" id="sidebar">
+    <aside class="sidebar-item">
+        <p class="text-justify">Здесь должен быть текст, который покажет, что я не только хороший специалист, но и приятный человек, но я его пока не придумал</p>
+    </aside>
+
+    <nav class="sidebar-nav">
+        <a href="about.html" class="sidebar-nav-item">Кто здесь?!</a>
+        <a href="https://github.com/Ascendens" class="sidebar-nav-item" rel="nofollow">GitHub</a>
+    </nav>
+
+    <footer class="sidebar-item">
+        <p>&copy; 2017 - 2019 ascendens.net</p>
+    </footer>
+</div>
+        <div class="wrap">
+            <div class="masthead">
+                <header class="container">
+                    <h3 class="masthead-title">
+                        <a href="/" title="Home">Пытаясь программировать</a>
+                        <small>...иногда даже получается</small>
+                    </h3>
+                </header>
+            </div>
+
+            <main class="container content"><article class="post">
+    <header>
+        <h1 class="post-title">Как я Loot Appraiser 1.9.3 чинил</h1>
+        <time class="post-date" datetime="2019-05-29T23:18:25+03:00">29 Май 2019</time>
+    </header>
+    
+<p><a href="https://wow.curseforge.com/projects/lootappraiser">Loot Appraiser</a> &mdash; это аддон, который позволяет учитывать доход
+от <a href="https://ru.wikipedia.org/wiki/%D0%A4%D0%B0%D1%80%D0%BC%D0%B5%D1%80_(MMORPG)">фарма</a>. Штука, несомненно, хорошая и
+полезная, но с двумя неприятными недочетами (как минимум, в версии 1.9.3), которые не позволяют разгуляться на полную.</p>
+<h2 id="fast-fix">Fast fix</h2>
+<p>Для тех, кто по ссылке под роликом <a href="https://youtu.be/fptQnrpQvtA">Полный мониторинг фарма. Исправления и настройка Loot Appraiser</a>
+и не сильно горит желанием разбираться в истоках описанных там проблем:</p>
+<ol>
+<li>Откройте папку c файлами World of Warcraft.</li>
+<li>Перейдите в <code>_retail_\Interface\AddOns\LootAppraiser</code>.</li>
+<li>Замените файл <span class="important">LootAppraiser.lua</span> на <a href="/assets/files/repairing-of-the-loot-appraiser/LootAppraiser.lua">этот</a>.</li>
+<li>Перейдите в <code>_retail_\Interface\AddOns\LootAppraiser\Core</code>.</li>
+<li>Замените файл <span class="important">Util.lua</span> на <a href="/assets/files/repairing-of-the-loot-appraiser/Util.lua">этот</a>.</li>
+<li>Запустите игру, или сделайте <code>/restart</code>, если она уже запущена.</li>
+</ol>
+<p>Более любознательных приглашаю к дальнейшему чтению!</p>
+<h2>Баг №1. Неправильный парсинг полученного золота</h2>
+<p>При фарме попадаются как предметы, так и золото. Каждый аспект учитывается отдельно. Количество золота аддон получает из
+сообщений чата &mdash; они конвертируются в число функцией <code>Util.StringToMoney</code> из файла <em>Core\Util.lua</em>:</p>
+<pre><code>-- parse currency text from loot window and covert the result to copper
+-- e.g. 2 silve, 2 copper -&gt; 202 copper
+function Util.StringToMoney(lootedCurrencyAsText)
+    local digits = {}
+    local digitsCounter = 0;
+    lootedCurrencyAsText:gsub("%d+",
+        function(i)
+            table.insert(digits, i)
+            digitsCounter = digitsCounter + 1
+        end
+    )
+    local copper = 0
+    if digitsCounter == 3 then
+        -- gold + silber + copper
+        copper = (digits[1]*10000)+(digits[2]*100)+(digits[3])
+    elseif digitsCounter == 2 then
+        -- silber + copper
+        copper = (digits[1]*100)+(digits[2])
+    else
+        -- copper
+        copper = digits[1]
+    end
+
+    return copper
+end</code></pre>
+<p>Как видно, строка преобразуется в таблицу чисел &mdash; по 1 столбцу для каждого порядка &mdash; через регулярное
+выражение <code>%d+</code>. По задумке авторов, строка вида <code>2 silve, 2 copper</code> станет таблицей <code>1 1</code>, а после, числом 202. Но для
+русской локализации, сообщение имеет следующий вид:</p>
+<pre><code> Ваша добыча: 2 |4серебряная:серебряные:серебряных;, 2 |4медная монета:медные монеты:медных монет;.</code></pre>
+<p>Не вникал, как это разбирает клиент WoW, но вышеприведенная функция выберет все цифры, что даст таблицу <code>2 4 2 4</code>, а
+после, так как столбцов аж 4, применит последнее условие и получится число 2. Для того, чтобы разбор велся верно,
+подкорректировать ругулярку:</p>
+<pre><code>-- Выбираем только последовательности цифр, после которых есть один пробел
+lootedCurrencyAsText:gsub("%d+%s", -- Строка 86</code></pre>
+<p>Теперь, сообщение будет преобразовано в <code>2 4</code>, применится второе условие, а на выходе будет <code>2 * 100 + 2 = 202</code>.</p>
+<h2>Баг №2. Неверные данные о цене от TSM, если предмет еще не в кэше</h2>
+<p>Еще один must have аддон &mdash; Trade Skill Master. Он добавляется множество нужного функционала, но в нашем случае
+интересны источники цен. Loot Appraiser использует API от Trade Skill Master, чтобы оценить потенциальную стоимость
+предмета. Беда лишь в том, что для впервые встреченных вещей, TSM возвращает 0, а потом таки достает реальную стоимость
+в фоне и далее будет возвращать искомые данные в полном объеме.</p>
+<p>Здесь пришлось пошаманить немного больше. Есть в файле <em>LootAppraiser.lua</em> фукнция <code>private.HandleItemLooted</code>, которая
+вызывается каждый раз, когда предмет попадает в сумку. В ней в, строке 513, вычисляется конечная стоимость набора:</p>
+<pre><code>local itemValue = singleItemValue * quantity</code></pre>
+<p>Я решил делать рекурсивный вызов <code>private.HandleItemLooted</code> каждые 300 мс до 5 раз, в надежде, что за это время TSM
+обновит данные и вернет правильную стоимость. Спойлеры, обычно правильная цена возвращается в ответ на уже второй
+запрос.</p>
+<pre><code>-- resolve price timer - это линия 512
+if 0 == singleItemValue then -- Если цена таки не определилась
+    if not ticker then -- И тикер не обьявлен
+        LA.Debug.Log("Single item value of "  .. tostring(itemID) .. ": " .. tostring(itemLink) .. " was not resolved. Trying to repeat")
+        -- Стартуем тикер со всеми нужными параметрами
+        ticker = C_Timer.NewTicker(0.3, private.resolvePriceTimerClosure, 5)
+        ticker.params = { itemLink = itemLink, itemID = itemID, quantity = quantity, source = source, priceSource = priceSource }
+    end
+    -- Если тикер не отменен и количество оставшихся итераций больше 1, то прерываем выполнение
+    if ticker and not ticker._cancelled and ticker._remainingIterations &gt; 1 then
+        LA.Debug.Log("Tiker has been started. Going to next iteration for "  .. tostring(itemID) .. ": " .. tostring(itemLink))
+
+        return
+    end
+    -- Сюда мы попадем, если прошло 5 итераций, но цена так и  не была определена
+    LA.Debug.Log("Price of "  .. tostring(itemID) .. ": " .. tostring(itemLink) .. " was not resolved. Timer aborted")
+end</code></pre>
+<p>Сама функция <code>private.resolvePriceTimerClosure</code> может быть помещена в конец файла:</p>
+<pre><code>-- retry to fetch item price
+function private.resolvePriceTimerClosure(ticker)
+    local params = ticker.params
+    local tsmPrice = LA.TSM.GetItemValue(params.itemID, params.priceSource) or 0 -- Пытаемся получить цену
+    -- Если получили
+    if tsmPrice &gt; 0 then
+        LA.Debug.Log("Price of "  .. tostring(params.itemID) .. ": " .. tostring(params.itemLink) .. " has been resolved: " .. tostring(tsmPrice))
+        ticker:Cancel() -- Отменяем тикер, что позволит добавить вещь в список и правильно сложить его цену
+    else
+        LA.Debug.Log("Timer for "  .. tostring(params.itemID) .. ": " .. tostring(params.itemLink) .. " will be runned " .. tostring(ticker._remainingIterations) .. " more times")
+    end
+    -- Делаем вызов private.HandleItemLooted
+    private.HandleItemLooted(params.itemLink, params.itemID, params.quantity, params.source, ticker)
+end</code></pre>
+<p>Внимательный читатель заметит, что сигнатура фукнции <code>private.HandleItemLooted</code> не содержит последнего аргумента
+<code>ticker</code> и будет прав. Нужно обновить сигнатуру в строке 441 на:</p>
+<pre><code>function private.HandleItemLooted(itemLink, itemID, quantity, source, ticker)</code></pre>
+<p>Теперь все должно работать. Не закэшированные вещи будут добавлены в список позже на 300 миллисекунд, зато с правильной
+ценой.</p>
+<h2>Бонус. Как увидеть debug log в игре?</h2>
+<p>Если есть желание поработать с кодом самостоятельно, подскажу, как включить отображение логов, отправленных через
+<code>LA.Debug.Log</code>. Необходимо создать окно чата с именем <strong>LADebug</strong>. Это все.</p>
+</article>
+</main>
+        </div>
+        <label for="sidebar-checkbox" class="sidebar-toggle"></label>
+                    <script>
+            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+                m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+            })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+            if (window.location.host.indexOf('local') === -1) {
+                ga('create', 'UA-18144383-3', 'auto');
+                ga('send', 'pageview');
+            }
+            </script>
+                <script src="/assets/build/js/highlight.min.js"></script>
+<script src="/assets/build/js/highlightjs-line-numbers.min.js"></script>
+<script>
+hljs.initHighlightingOnLoad();
+hljs.initLineNumbersOnLoad();
+</script>
+    </body>
+</html>
