@@ -16,5 +16,9 @@
 
 @section('bottom_js')
 <script src="{{ mix('js/highlight.min.js', 'assets/build') }}"></script>
-<script>hljs.initHighlightingOnLoad();</script>.
+<script src="{{ mix('js/highlightjs-line-numbers.min.js', 'assets/build') }}"></script>
+<script>
+hljs.initHighlightingOnLoad();
+hljs.initLineNumbersOnLoad();
+</script>
 @endsection

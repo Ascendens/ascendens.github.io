@@ -79,3 +79,4 @@ yarn-error.log
 # /source/assets/build/js/
 
 .env
+package-lock.json
