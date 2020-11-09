@@ -1,4 +1,4 @@
-# [ascendens.net](http://ascendens.net/)
+# [ascendens.github.io](http://ascendens.github.io/)
 
 Sources of one blog about programming.
 
